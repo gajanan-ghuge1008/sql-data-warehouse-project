@@ -1,4 +1,4 @@
--- insert bulk raw data into bronze layer tables
+-- DDL Script - Create Bronze layer & insert bulk raw data into bronze layer tables
 
 -- create procedure to load data
 create or alter procedure bronze.load_bronze as 
