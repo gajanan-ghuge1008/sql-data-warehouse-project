@@ -1,5 +1,5 @@
 -- *** Clean & Load Data ***
--- insert cleaned data into silver.crm_cust_info
+-- *** insert cleaned data into silver.crm_cust_info
 
 insert into silver.crm_cust_info ( 
 cust_id,
@@ -33,7 +33,7 @@ from (
 ) t where  flag_last= 1 -- removing duplicates
 
 
--- insert cleaned data into silver.crm_prd_info
+-- *** insert cleaned data into silver.crm_prd_info
 
 if OBJECT_ID ('silver.crm_prd_info','U')  is not null
 	drop table silver.crm_prd_info;
@@ -77,7 +77,7 @@ cast(prd_start_dt AS date) as pr_start_dt,
 cast(LEAD(prd_start_dt) over(partition by prd_key order by prd_start_dt )-1 AS  DATE)  as prd_end_dt -- calculate end date as one day before the next start date
  from bronze.crm_prd_info;
 
---  added some new column for that droping and createing new
+-- ***  added some new column for that droping and createing new
 
 if object_id ('silver.crm_sales_details','U') is not null
 	drop table silver.crm_sales_details;
@@ -132,7 +132,7 @@ end AS  sls_price
 from bronze.crm_sales_details
 
 
--- insert cleaned data into silver.erp__cust_az12
+-- *** insert cleaned data into silver.erp__cust_az12
 insert into silver.erp_cust_az12(
 cid,bdate,gen)
 
@@ -149,4 +149,16 @@ case when upper(trim(gen)) in ('F','Female') then 'Female'
 end gen -- Normalize gender values and handle unknown cases
 from bronze.erp_cust_az12
 
+-- *** insert cleaned data into silver.erp__loc_a101
+
+insert into silver.erp_loc_a101(
+cid, cntry)
+select  
+REPLACE(cid,'-','') as cid ,
+case when trim(cntry) In ('USA','US') then 'United States'
+	 when trim(cntry) IN ('DE') THEN 'Germany'
+	 when trim(cntry) = '' OR TRIM(cntry) IS null then 'n/a'
+	 else TRIM(cntry)
+end as cntry -- Normalize and handle missing or blank country codes
+from bronze.erp_loc_a101;
 
