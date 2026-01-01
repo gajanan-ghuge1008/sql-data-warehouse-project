@@ -137,16 +137,16 @@ insert into silver.erp_cust_az12(
 cid,bdate,gen)
 
 select
-case when cid like 'NAS%' then SUBSTRING(cid, 4,len(cid))
+case when cid like 'NAS%' then SUBSTRING(cid, 4,len(cid)) -- remove 'NAS'  prefix if present
 	 else cid
 end as cid,
 case when bdate > GETDATE() then null
-	 else bdate
+	 else bdate -- Set future birhdates to null 
 end bdate,
 case when upper(trim(gen)) in ('F','Female') then 'Female'
 	 when upper(trim(gen)) in ('M', 'Male') then 'Male'
 	 else 'n/a'
-end gen
+end gen -- Normalize gender values and handle unknown cases
 from bronze.erp_cust_az12
 
 
