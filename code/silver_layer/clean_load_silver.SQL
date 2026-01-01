@@ -162,3 +162,15 @@ case when trim(cntry) In ('USA','US') then 'United States'
 end as cntry -- Normalize and handle missing or blank country codes
 from bronze.erp_loc_a101;
 
+
+-- *** insert cleaned data into silver.erp__px_cat_g1v2
+
+insert into silver.erp_px_cat_g1v2 (
+id,cat,subcat,maintenance)
+
+select id,cat, subcat,maintenance from bronze.erp_px_cat_g1v2; -- data is clean 
+
+
+-- ***  loaded all 6 table cleaned data into silver layer *** 
+
+
