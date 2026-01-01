@@ -1,3 +1,4 @@
+-- *** Clean & Load Data ***
 -- insert cleaned data into silver.crm_cust_info
 
 insert into silver.crm_cust_info ( 
